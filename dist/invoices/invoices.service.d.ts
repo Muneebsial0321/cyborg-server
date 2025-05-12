@@ -15,13 +15,13 @@ export declare class InvoicesService {
     }>;
     findAll(q: InvoiceSearchType): Prisma.PrismaPromise<({
         user: {
+            name: string;
+            email: string;
+            cardio: boolean;
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            name: string;
-            email: string;
             phoneNumber: string;
-            cardio: boolean;
             nextPayment: Date;
         };
     } & {
