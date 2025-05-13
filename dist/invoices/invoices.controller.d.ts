@@ -20,7 +20,7 @@ export declare class InvoicesController {
     findAll(q: InvoiceSearchType): Prisma.PrismaPromise<({
         user: {
             name: string;
-            email: string;
+            email: string | null;
             cardio: boolean;
             id: string;
             createdAt: Date;

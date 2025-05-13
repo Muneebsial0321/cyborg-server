@@ -8,11 +8,12 @@ export declare class AttendanceService {
         userId: string;
         createdAt: Date;
         updatedAt: Date;
+        time: import(".prisma/client").$Enums.timeType | null;
     }>;
     findAll(): Prisma.PrismaPromise<({
         User: {
             name: string;
-            email: string;
+            email: string | null;
             id: string;
             phoneNumber: string;
             nextPayment: Date;
@@ -22,5 +23,6 @@ export declare class AttendanceService {
         userId: string;
         createdAt: Date;
         updatedAt: Date;
+        time: import(".prisma/client").$Enums.timeType | null;
     })[]>;
 }

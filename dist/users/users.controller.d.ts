@@ -24,7 +24,7 @@ export declare class UsersController {
             updatedAt: Date;
         };
         name: string;
-        email: string;
+        email: string | null;
         cardio: boolean;
         id: string;
         createdAt: Date;
@@ -35,7 +35,7 @@ export declare class UsersController {
     findAll(query: string | null, paymentStatus: "paid" | "finishing" | "due" | null): Prisma.PrismaPromise<unknown>;
     findOne(id: string): Prisma.Prisma__UserClient<{
         name: string;
-        email: string;
+        email: string | null;
         cardio: boolean;
         id: string;
         createdAt: Date;

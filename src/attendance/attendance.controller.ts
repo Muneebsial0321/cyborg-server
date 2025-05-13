@@ -8,6 +8,7 @@ export class AttendanceController {
 
   @Post()
   create(@Body() createAttendanceDto: Prisma.AttendanceUncheckedCreateInput) {
+    console.log({ createAttendanceDto });
     return this.attendanceService.create(createAttendanceDto);
   }
 

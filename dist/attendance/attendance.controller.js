@@ -21,6 +21,7 @@ let AttendanceController = class AttendanceController {
         this.attendanceService = attendanceService;
     }
     create(createAttendanceDto) {
+        console.log({ createAttendanceDto });
         return this.attendanceService.create(createAttendanceDto);
     }
     findAll() {

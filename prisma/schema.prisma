@@ -16,7 +16,7 @@ datasource db {
 model User {
   id          String       @id @default(uuid())
   name        String
-  email       String
+  email       String?
   phoneNumber String
   cardio      Boolean      @default(false)
   createdAt   DateTime     @default(now())
@@ -27,11 +27,12 @@ model User {
 }
 
 model Attendance {
-  id        String   @id @default(uuid())
-  User      User     @relation(fields: [userId], references: [id])
+  id        String    @id @default(uuid())
+  User      User      @relation(fields: [userId], references: [id])
   userId    String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  time      timeType?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 model Invoice {
@@ -48,4 +49,9 @@ model Invoice {
 enum invoiceType {
   MONTHLY_FEE
   REGISTRATION_FEE
+}
+
+enum timeType {
+  MORNING
+  EVENING
 }

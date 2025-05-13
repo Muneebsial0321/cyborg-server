@@ -23,7 +23,7 @@ export declare class UsersService {
             updatedAt: Date;
         };
         name: string;
-        email: string;
+        email: string | null;
         cardio: boolean;
         id: string;
         createdAt: Date;
@@ -34,7 +34,7 @@ export declare class UsersService {
     findAll(paymentStatus: string | null, query: string | null): import(".prisma/client").Prisma.PrismaPromise<unknown>;
     findOne(id: string): import(".prisma/client").Prisma.Prisma__UserClient<{
         name: string;
-        email: string;
+        email: string | null;
         cardio: boolean;
         id: string;
         createdAt: Date;
