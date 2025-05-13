@@ -1,0 +1,4 @@
+pm2 start server.js --name my-backend
+pm2 save
+npm install -g pm2-windows-startup
+pm2-startup install
