@@ -19,6 +19,10 @@ export class CreateUserDto {
     @IsNotEmpty()
     cardio: boolean;
 
+    @IsBoolean()
+    @IsNotEmpty()
+    personalTrainer: boolean;
+
     @IsNumber()
     @IsNotEmpty()
     registrationFee: number

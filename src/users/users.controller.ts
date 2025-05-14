@@ -14,6 +14,8 @@ export class UsersController {
   create(
     @UploadedFile() image: Express.Multer.File,
     @Body() createUserDto: CreateUserDto) {
+      console.log({createUserDto,image});
+      
     return this.usersService.create(createUserDto);
   }
 
@@ -27,9 +29,17 @@ export class UsersController {
     return this.usersService.findAll(paymentStatus, query);
   }
 
-  @Get(':id')
+  @Get('/s/:id')
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(id);
   }
+
+  @Get("total")
+  findTotalUsers(){
+   return this.usersService.findAllUsersCount()
+  }
+
+  @Get("dashboard")
+  getDashboardData(){}
 
 }

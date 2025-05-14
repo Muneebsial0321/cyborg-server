@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AttendanceService = void 0;
 const common_1 = require("@nestjs/common");
 const db_service_1 = require("../db/db.service");
+const date_fns_1 = require("date-fns");
 let AttendanceService = class AttendanceService {
     constructor(db) {
         this.db = db;
@@ -32,8 +33,39 @@ let AttendanceService = class AttendanceService {
             throw new common_1.ConflictException("Attendance already exists.");
         return this.db.attendance.create({ data: attendance });
     }
-    findAll() {
-        return this.db.attendance.findMany({ include: { User: { select: { email: true, name: true, id: true, phoneNumber: true, nextPayment: true } } } });
+    findAll(q) {
+        return this.db.attendance.findMany({
+            where: {
+                ...(q.query && {
+                    OR: [
+                        { User: { name: { contains: q.query } } },
+                        { User: { phoneNumber: { contains: q.query } } }
+                    ]
+                }),
+                ...(q.createdAt && {
+                    createdAt: {
+                        gte: new Date(q.createdAt),
+                        lt: new Date(new Date(q.createdAt).setDate(new Date(q.createdAt).getDate() + 1))
+                    }
+                }),
+                ...(q.attendanceType && {
+                    time: q.attendanceType
+                })
+            },
+            include: {
+                User: {
+                    select: { email: true, name: true, id: true, phoneNumber: true, nextPayment: true }
+                }
+            }
+        });
+    }
+    async findAttendanceCountWhereDateIsToday() {
+        const attendanceCount = await this.db.attendance.count({
+            where: {
+                createdAt: { gte: (0, date_fns_1.startOfDay)(new Date()), lt: (0, date_fns_1.startOfDay)((0, date_fns_1.addDays)(new Date(), 1)) }
+            }
+        });
+        return { attendanceCount };
     }
 };
 exports.AttendanceService = AttendanceService;

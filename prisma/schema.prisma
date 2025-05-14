@@ -14,16 +14,17 @@ datasource db {
 }
 
 model User {
-  id          String       @id @default(uuid())
-  name        String
-  email       String?
-  phoneNumber String
-  cardio      Boolean      @default(false)
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  nextPayment DateTime
-  attendance  Attendance[]
-  Invoice     Invoice[]
+  id              String       @id @default(uuid())
+  name            String
+  email           String?
+  phoneNumber     String
+  cardio          Boolean      @default(false)
+  presonalTrainer Boolean      @default(false)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  nextPayment     DateTime
+  attendance      Attendance[]
+  Invoice         Invoice[]
 }
 
 model Attendance {

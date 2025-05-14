@@ -26,6 +26,7 @@ let UsersService = class UsersService {
                     email: user.email,
                     phoneNumber: user.phone,
                     cardio: user.cardio,
+                    presonalTrainer: user.personalTrainer,
                     nextPayment
                 }
             });
@@ -93,6 +94,14 @@ let UsersService = class UsersService {
     }
     findOne(id) {
         return this.dbService.user.findUnique({ where: { id: id } });
+    }
+    async findAllUsersCount() {
+        const usersCount = await this.dbService.user.count();
+        return { usersCount };
+    }
+    async getDashboardData() {
+        const totalUser = "";
+        const totalAttendanceToday = "";
     }
 };
 exports.UsersService = UsersService;

@@ -22,6 +22,7 @@ export class UsersService {
           email: user.email,
           phoneNumber: user.phone,
           cardio: user.cardio,
+          presonalTrainer: user.personalTrainer,
           nextPayment
         }
       })
@@ -101,5 +102,15 @@ export class UsersService {
 
   findOne(id: string) {
     return this.dbService.user.findUnique({ where: { id: id } })
+  }
+
+  async findAllUsersCount(){
+    const usersCount = await this.dbService.user.count()
+    return {usersCount}
+  }
+
+  async getDashboardData(){
+    const totalUser =""
+    const totalAttendanceToday =""
   }
 }

@@ -12,7 +12,7 @@ export class InvoicesService {
   async create(invoice: Prisma.InvoiceUncheckedCreateInput) {
     const user = await this.db.user.findFirst({ where: { id: invoice.userId } })
     if (!user) throw new NotFoundException('User Not Found');
-    if (user.nextPayment! > new Date()) throw new BadRequestException('Payment Already exist');
+    if (user.nextPayment > new Date()) throw new BadRequestException('Payment Already exist');
 
     const nextPayment = new Date()
     nextPayment.setMonth(nextPayment.getMonth() + 1)

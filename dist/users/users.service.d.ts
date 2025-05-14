@@ -29,6 +29,7 @@ export declare class UsersService {
         createdAt: Date;
         updatedAt: Date;
         phoneNumber: string;
+        presonalTrainer: boolean;
         nextPayment: Date;
     }>;
     findAll(paymentStatus: string | null, query: string | null): import(".prisma/client").Prisma.PrismaPromise<unknown>;
@@ -40,6 +41,11 @@ export declare class UsersService {
         createdAt: Date;
         updatedAt: Date;
         phoneNumber: string;
+        presonalTrainer: boolean;
         nextPayment: Date;
     } | null, null, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
+    findAllUsersCount(): Promise<{
+        usersCount: number;
+    }>;
+    getDashboardData(): Promise<void>;
 }

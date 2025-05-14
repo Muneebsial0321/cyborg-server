@@ -24,8 +24,12 @@ let AttendanceController = class AttendanceController {
         console.log({ createAttendanceDto });
         return this.attendanceService.create(createAttendanceDto);
     }
-    findAll() {
-        return this.attendanceService.findAll();
+    findAll(q) {
+        console.log({ q });
+        return this.attendanceService.findAll(q);
+    }
+    findTodaysAttendance() {
+        return this.attendanceService.findAttendanceCountWhereDateIsToday();
     }
 };
 exports.AttendanceController = AttendanceController;
@@ -38,10 +42,17 @@ __decorate([
 ], AttendanceController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
+    __param(0, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], AttendanceController.prototype, "findAll", null);
+__decorate([
+    (0, common_1.Get)("today"),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
-], AttendanceController.prototype, "findAll", null);
+], AttendanceController.prototype, "findTodaysAttendance", null);
 exports.AttendanceController = AttendanceController = __decorate([
     (0, common_1.Controller)('attendance'),
     __metadata("design:paramtypes", [attendance_service_1.AttendanceService])

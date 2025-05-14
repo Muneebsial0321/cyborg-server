@@ -35,6 +35,11 @@ __decorate([
     __metadata("design:type", Boolean)
 ], CreateUserDto.prototype, "cardio", void 0);
 __decorate([
+    (0, class_validator_1.IsBoolean)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", Boolean)
+], CreateUserDto.prototype, "personalTrainer", void 0);
+__decorate([
     (0, class_validator_1.IsNumber)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", Number)

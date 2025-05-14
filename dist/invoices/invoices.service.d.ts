@@ -22,6 +22,7 @@ export declare class InvoicesService {
             createdAt: Date;
             updatedAt: Date;
             phoneNumber: string;
+            presonalTrainer: boolean;
             nextPayment: Date;
         };
     } & {

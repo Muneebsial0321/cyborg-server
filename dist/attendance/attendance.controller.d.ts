@@ -1,5 +1,10 @@
 import { AttendanceService } from './attendance.service';
 import { Prisma } from '@prisma/client';
+export type AttendanceSearchType = {
+    query: string | null;
+    createdAt: string | null;
+    attendanceType: 'MORNING' | 'EVENING' | null;
+};
 export declare class AttendanceController {
     private readonly attendanceService;
     constructor(attendanceService: AttendanceService);
@@ -10,7 +15,7 @@ export declare class AttendanceController {
         updatedAt: Date;
         time: import(".prisma/client").$Enums.timeType | null;
     }>;
-    findAll(): Prisma.PrismaPromise<({
+    findAll(q: AttendanceSearchType): Prisma.PrismaPromise<({
         User: {
             name: string;
             email: string | null;
@@ -25,4 +30,7 @@ export declare class AttendanceController {
         updatedAt: Date;
         time: import(".prisma/client").$Enums.timeType | null;
     })[]>;
+    findTodaysAttendance(): Promise<{
+        attendanceCount: number;
+    }>;
 }

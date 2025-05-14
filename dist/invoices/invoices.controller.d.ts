@@ -26,6 +26,7 @@ export declare class InvoicesController {
             createdAt: Date;
             updatedAt: Date;
             phoneNumber: string;
+            presonalTrainer: boolean;
             nextPayment: Date;
         };
     } & {

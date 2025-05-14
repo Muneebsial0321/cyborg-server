@@ -3,6 +3,7 @@ export declare class CreateUserDto {
     email: string;
     phone: string;
     cardio: boolean;
+    personalTrainer: boolean;
     registrationFee: number;
     monthlyFee: number;
     image: any;
