@@ -15,21 +15,25 @@ export class CreateUserDto {
     @IsNotEmpty()
     phone: string;
 
-    @IsBoolean()
+    @IsString()
     @IsNotEmpty()
-    cardio: boolean;
+    nextPayment: string;
 
-    @IsBoolean()
+    @IsString()
     @IsNotEmpty()
-    personalTrainer: boolean;
+    cardio: string;
 
-    @IsNumber()
+    @IsString()
     @IsNotEmpty()
-    registrationFee: number
+    personalTrainer: string;
 
-    @IsNumber()
+    @IsString()
     @IsNotEmpty()
-    monthlyFee: number;
+    registrationFee: string
+
+    @IsString()
+    @IsNotEmpty()
+    monthlyFee: string;
 
     @IsOptional()
     image:any

@@ -1,5 +1,5 @@
 import { InvoicesService } from './invoices.service';
-import { Prisma } from '@prisma/client';
+import { CreateInvoiceDto } from './create-invoice.dto';
 export type InvoiceSearchType = {
     query: string | null;
     createdAt: string | null;
@@ -8,43 +8,58 @@ export type InvoiceSearchType = {
 export declare class InvoicesController {
     private readonly invoicesService;
     constructor(invoicesService: InvoicesService);
-    create(createInvoiceDto: Prisma.InvoiceUncheckedCreateInput): Promise<{
-        id: string;
-        fee: number;
-        invoiceType: import(".prisma/client").$Enums.invoiceType;
-        description: string | null;
-        userId: string;
-        createdAt: Date;
-        updatedAt: Date;
-    }>;
-    findAll(q: InvoiceSearchType): Prisma.PrismaPromise<({
-        user: {
+    create(createInvoiceDto: CreateInvoiceDto): Promise<{
+        userInstance: {
             name: string;
+            id: string;
             email: string | null;
+            phoneNumber: string;
             cardio: boolean;
+            presonalTrainer: boolean;
+            createdAt: Date;
+            updatedAt: Date;
+            nextPayment: Date;
+            picUrl: string | null;
+        };
+        invoiceInstance: {
             id: string;
             createdAt: Date;
             updatedAt: Date;
+            fee: number;
+            invoiceType: import(".prisma/client").$Enums.invoiceType;
+            description: string | null;
+            userId: string;
+        };
+    }>;
+    findAll(q: InvoiceSearchType): import(".prisma/client").Prisma.PrismaPromise<({
+        user: {
+            name: string;
+            id: string;
+            email: string | null;
             phoneNumber: string;
+            cardio: boolean;
             presonalTrainer: boolean;
+            createdAt: Date;
+            updatedAt: Date;
             nextPayment: Date;
+            picUrl: string | null;
         };
     } & {
         id: string;
+        createdAt: Date;
+        updatedAt: Date;
         fee: number;
         invoiceType: import(".prisma/client").$Enums.invoiceType;
         description: string | null;
         userId: string;
-        createdAt: Date;
-        updatedAt: Date;
     })[]>;
-    findOne(id: string): Prisma.Prisma__InvoiceClient<{
+    findOne(id: string): import(".prisma/client").Prisma.Prisma__InvoiceClient<{
         id: string;
+        createdAt: Date;
+        updatedAt: Date;
         fee: number;
         invoiceType: import(".prisma/client").$Enums.invoiceType;
         description: string | null;
         userId: string;
-        createdAt: Date;
-        updatedAt: Date;
-    } | null, null, import("@prisma/client/runtime/library").DefaultArgs, Prisma.PrismaClientOptions>;
+    } | null, null, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
 }

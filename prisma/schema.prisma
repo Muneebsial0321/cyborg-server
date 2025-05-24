@@ -25,6 +25,7 @@ model User {
   nextPayment     DateTime
   attendance      Attendance[]
   Invoice         Invoice[]
+  picUrl          String?
 }
 
 model Attendance {

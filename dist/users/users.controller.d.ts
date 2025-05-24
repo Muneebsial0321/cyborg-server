@@ -1,5 +1,4 @@
 import { UsersService } from './users.service';
-import { Prisma } from '@prisma/client';
 import { CreateUserDto } from './create-user-dto';
 export declare class UsersController {
     private readonly usersService;
@@ -25,26 +24,33 @@ export declare class UsersController {
         };
         name: string;
         email: string | null;
+        nextPayment: Date;
         cardio: boolean;
         id: string;
         createdAt: Date;
         updatedAt: Date;
         phoneNumber: string;
         presonalTrainer: boolean;
-        nextPayment: Date;
+        picUrl: string | null;
     }>;
-    findAll(query: string | null, paymentStatus: "paid" | "finishing" | "due" | null): Prisma.PrismaPromise<unknown>;
-    findOne(id: string): Prisma.Prisma__UserClient<{
+    findAll(query: string | null, paymentStatus: "paid" | "finishing" | "due" | null): Promise<any[]>;
+    findOne(id: string): import(".prisma/client").Prisma.Prisma__UserClient<{
         name: string;
         email: string | null;
+        nextPayment: Date;
         cardio: boolean;
         id: string;
         createdAt: Date;
         updatedAt: Date;
         phoneNumber: string;
         presonalTrainer: boolean;
-        nextPayment: Date;
-    } | null, null, import("@prisma/client/runtime/library").DefaultArgs, Prisma.PrismaClientOptions>;
+        picUrl: string | null;
+    } | null, null, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
+    getStats(): Promise<{
+        totalUsers: number;
+        usersToday: number;
+        totalRevenue: number;
+    }>;
     findTotalUsers(): Promise<{
         usersCount: number;
     }>;

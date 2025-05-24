@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.InvoicesController = void 0;
 const common_1 = require("@nestjs/common");
 const invoices_service_1 = require("./invoices.service");
-const client_1 = require("@prisma/client");
+const create_invoice_dto_1 = require("./create-invoice.dto");
 let InvoicesController = class InvoicesController {
     constructor(invoicesService) {
         this.invoicesService = invoicesService;
@@ -36,7 +36,7 @@ __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [create_invoice_dto_1.CreateInvoiceDto]),
     __metadata("design:returntype", void 0)
 ], InvoicesController.prototype, "create", null);
 __decorate([

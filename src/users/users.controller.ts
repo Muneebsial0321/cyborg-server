@@ -1,7 +1,10 @@
-import { Controller, Get, Post, Body, Param, Query, UseInterceptors, UploadedFile, Req, } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Query, UseInterceptors, UploadedFile } from '@nestjs/common';
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { UsersService } from './users.service';
-import { Prisma } from '@prisma/client';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { multerConfig } from '../config/multer.config';
+import * as path from 'path';
 import { CreateUserDto } from './create-user-dto';
 
 
@@ -10,13 +13,25 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
   @Post()
-  @UseInterceptors(FileInterceptor("image"))
+  @UseInterceptors(FileInterceptor("image", {
+    storage: diskStorage({
+      destination: multerConfig.dest,
+      filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+      }
+    }),
+    fileFilter: multerConfig.fileFilter,
+    limits: multerConfig.limits
+  }))
   create(
     @UploadedFile() image: Express.Multer.File,
     @Body() createUserDto: CreateUserDto) {
-      console.log({createUserDto,image});
-      
-    return this.usersService.create(createUserDto);
+      const userWithImage = {
+        ...createUserDto,
+        image: image ? image.filename : null
+      };
+      return this.usersService.create(userWithImage);
   }
 
   @Get()
@@ -32,6 +47,23 @@ export class UsersController {
   @Get('/s/:id')
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(id);
+  }
+
+  @Get('/stats')
+  async getStats() {
+    const [totalUsers, usersToday, monthlyInvoices] = await Promise.all([
+      this.usersService.getTotalUsers(),
+      this.usersService.getUsersPresentToday(),
+      this.usersService.getMonthlyInvoices()
+    ]);
+
+    const { totalRevenue } = monthlyInvoices;
+      
+    return {
+      totalUsers,
+      usersToday,
+      totalRevenue
+    };
   }
 
   @Get("total")

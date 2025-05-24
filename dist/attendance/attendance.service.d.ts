@@ -15,9 +15,9 @@ export declare class AttendanceService {
         User: {
             name: string;
             email: string | null;
+            nextPayment: Date;
             id: string;
             phoneNumber: string;
-            nextPayment: Date;
         };
     } & {
         id: string;
