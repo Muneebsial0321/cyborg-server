@@ -27,11 +27,11 @@ export class UsersController {
   create(
     @UploadedFile() image: Express.Multer.File,
     @Body() createUserDto: CreateUserDto) {
-      const userWithImage = {
-        ...createUserDto,
-        image: image ? image.filename : null
-      };
-      return this.usersService.create(userWithImage);
+    const userWithImage = {
+      ...createUserDto,
+      image: image ? image.filename : null
+    };
+    return this.usersService.create(userWithImage);
   }
 
   @Get()
@@ -51,27 +51,33 @@ export class UsersController {
 
   @Get('/stats')
   async getStats() {
-    const [totalUsers, usersToday, monthlyInvoices] = await Promise.all([
+    const [totalUsers, usersToday, monthlyInvoices, morningAttendance, eveningAttendance, attendanceToday] = await Promise.all([
       this.usersService.getTotalUsers(),
       this.usersService.getUsersPresentToday(),
-      this.usersService.getMonthlyInvoices()
+      this.usersService.getMonthlyInvoices(),
+      this.usersService.getAllMorningAttendance(),
+      this.usersService.getAllEveningAttendance(),
+      this.usersService.getAllAttendanceToday(),
     ]);
 
     const { totalRevenue } = monthlyInvoices;
-      
-    return {
-      totalUsers,
-      usersToday,
-      totalRevenue
-    };
+
+    return [
+      { label: "Total Users", data: totalUsers },
+      { label: "Users Today", data: usersToday },
+      { label: "Total Revenue", data: totalRevenue },
+      { label: "Attendance Today", data: attendanceToday },
+      { label: "Morning Attendance", data: morningAttendance },
+      { label: "Evening Attendance", data: eveningAttendance },
+    ];
   }
 
   @Get("total")
-  findTotalUsers(){
-   return this.usersService.findAllUsersCount()
+  findTotalUsers() {
+    return this.usersService.findAllUsersCount()
   }
 
   @Get("dashboard")
-  getDashboardData(){}
+  getDashboardData() { }
 
 }

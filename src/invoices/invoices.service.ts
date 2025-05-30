@@ -19,7 +19,7 @@ export class InvoicesService {
       this.db.user.update({ where: { id: invoice.userId }, data: { nextPayment: new Date(invoice.nextPayment) } }),
       this.db.invoice.create({
         data: {
-          fee: invoice.fee,
+          fee: Number(invoice.fee),
           invoiceType: invoice.invoiceType,
           description: invoice.description,
           userId: invoice.userId,

@@ -28,6 +28,56 @@ export class UsersService {
     });
   }
 
+  async getAllAttendanceToday() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    return this.dbService.attendance.count({
+      where: {
+        createdAt: {
+          gte: today,
+          lt: tomorrow
+        }
+      }
+    });
+  }
+
+  async getAllMorningAttendance() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    return this.dbService.attendance.count({
+      where: {
+        time: "MORNING",
+        createdAt: {
+          gte: today,
+          lt: tomorrow
+        }
+      }
+    });
+  }
+
+  async getAllEveningAttendance() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    return this.dbService.attendance.count({
+      where: {
+        time: "EVENING",
+        createdAt: {
+          gte: today,
+          lt: tomorrow
+        }
+      }
+    });
+  }
+
   async getMonthlyInvoices() {
     const currentMonth = new Date();
     const startOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
@@ -127,7 +177,7 @@ export class UsersService {
 
         CASE 
           WHEN u.nextPayment < CURDATE() THEN "due"
-          WHEN u.nextPayment < CURDATE() + INTERVAL 5 DAY THEN "finishing"
+          WHEN u.nextPayment < CURDATE() + INTERVAL 7 DAY THEN "finishing"
           ELSE "paid"
         END As hasPaid      
 
@@ -140,25 +190,25 @@ export class UsersService {
           
       `;
 
-      return (data as any[]).map((e:any)=>{
-          return {
-            ...e,
-            picUrl: e.picUrl ? `${"http://localhost:5000"}/uploads/${e.picUrl}` : null
-          }
-      })
+    return (data as any[]).map((e: any) => {
+      return {
+        ...e,
+        picUrl: e.picUrl ? `${"http://localhost:5000"}/uploads/${e.picUrl}` : null
+      }
+    })
   }
 
   findOne(id: string) {
     return this.dbService.user.findUnique({ where: { id: id } })
   }
 
-  async findAllUsersCount(){
+  async findAllUsersCount() {
     const usersCount = await this.dbService.user.count()
-    return {usersCount}
+    return { usersCount }
   }
 
-  async getDashboardData(){
-    const totalUser =""
-    const totalAttendanceToday =""
+  async getDashboardData() {
+    const totalUser = ""
+    const totalAttendanceToday = ""
   }
 }

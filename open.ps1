@@ -4,6 +4,9 @@ git pull origin main
 npm run build
 
 Write-Host "Check Status..."
+npx prisma db push
+
+Write-Host "Check Status..."
 pm2 delete cyborg-server 
 
 Write-Host "Starting Application...."
