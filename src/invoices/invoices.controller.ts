@@ -1,20 +1,20 @@
 import { Controller, Get, Post, Body, Param, Query, } from '@nestjs/common';
 import { InvoicesService } from './invoices.service';
-import { Prisma } from '@prisma/client';
+import { CreateInvoiceDto } from './create-invoice.dto';
 
 
 export type InvoiceSearchType = {
   query: string | null;
   createdAt: string | null;
   // nextPayment: string | null;
-  invoiceType: 'MONTHLY_FEE' |  'REGISTRATION_FEE' | null;
+  invoiceType: 'MONTHLY_FEE' | 'REGISTRATION_FEE' | null;
 }
 @Controller('invoices')
 export class InvoicesController {
   constructor(private readonly invoicesService: InvoicesService) { }
 
   @Post()
-  create(@Body() createInvoiceDto: Prisma.InvoiceUncheckedCreateInput) {
+  create(@Body() createInvoiceDto: CreateInvoiceDto) {
     return this.invoicesService.create(createInvoiceDto);
   }
 

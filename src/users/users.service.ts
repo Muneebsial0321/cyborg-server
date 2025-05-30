@@ -7,10 +7,101 @@ import { CreateUserDto } from './create-user-dto';
 export class UsersService {
 
   constructor(private readonly dbService: DbService) { }
-  async create(user: CreateUserDto) {
 
-    const nextPayment = new Date();
-    nextPayment.setMonth(nextPayment.getMonth() + 1);
+  async getTotalUsers() {
+    return this.dbService.user.count();
+  }
+
+  async getUsersPresentToday() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    return this.dbService.user.count({
+      where: {
+        createdAt: {
+          gte: today,
+          lt: tomorrow
+        }
+      }
+    });
+  }
+
+  async getAllAttendanceToday() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    return this.dbService.attendance.count({
+      where: {
+        createdAt: {
+          gte: today,
+          lt: tomorrow
+        }
+      }
+    });
+  }
+
+  async getAllMorningAttendance() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    return this.dbService.attendance.count({
+      where: {
+        time: "MORNING",
+        createdAt: {
+          gte: today,
+          lt: tomorrow
+        }
+      }
+    });
+  }
+
+  async getAllEveningAttendance() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    return this.dbService.attendance.count({
+      where: {
+        time: "EVENING",
+        createdAt: {
+          gte: today,
+          lt: tomorrow
+        }
+      }
+    });
+  }
+
+  async getMonthlyInvoices() {
+    const currentMonth = new Date();
+    const startOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
+    const endOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0);
+    const nextMonth = new Date(currentMonth);
+    nextMonth.setMonth(currentMonth.getMonth() + 1);
+
+    const invoices = await this.dbService.invoice.findMany({
+      where: {
+        createdAt: {
+          gte: startOfMonth,
+          lt: endOfMonth
+        }
+      },
+      include: {
+        user: true
+      }
+    });
+
+    const totalRevenue = invoices.reduce((sum, invoice) => sum + invoice.fee, 0);
+    return { totalRevenue };
+  }
+
+  async create(user: CreateUserDto) {
 
     // transation
     const { monthlyInvoice, registrationInvoice, userInstance } = await this.dbService.$transaction(async (tx) => {
@@ -21,16 +112,17 @@ export class UsersService {
           name: user.name,
           email: user.email,
           phoneNumber: user.phone,
-          cardio: user.cardio,
-          presonalTrainer: user.personalTrainer,
-          nextPayment
+          cardio: user.cardio.toLocaleLowerCase() === "true",
+          presonalTrainer: user.personalTrainer.toLocaleLowerCase() === "true",
+          nextPayment: new Date(user.nextPayment),
+          picUrl: user?.image
         }
       })
 
       // registration invoice
       const registrationInvoice = await tx.invoice.create({
         data: {
-          fee: user.registrationFee,
+          fee: Number(user.registrationFee),
           userId: userInstance.id,
           invoiceType: 'REGISTRATION_FEE',
           description: "Invoice For Registration",
@@ -40,7 +132,7 @@ export class UsersService {
       // monthly free invoice
       const monthlyInvoice = await tx.invoice.create({
         data: {
-          fee: user.monthlyFee,
+          fee: Number(user.monthlyFee),
           userId: userInstance.id,
           invoiceType: "MONTHLY_FEE",
           description: "Invoice for Monthly payment"
@@ -62,11 +154,11 @@ export class UsersService {
     }
   }
 
-  findAll(
+  async findAll(
     paymentStatus: string | null,
     query: string | null
   ) {
-    return this.dbService
+    const data = await this.dbService
       .$queryRaw`
       SELECT * FROM (
         SELECT
@@ -85,7 +177,7 @@ export class UsersService {
 
         CASE 
           WHEN u.nextPayment < CURDATE() THEN "due"
-          WHEN u.nextPayment < CURDATE() + INTERVAL 2 DAY THEN "finishing"
+          WHEN u.nextPayment < CURDATE() + INTERVAL 7 DAY THEN "finishing"
           ELSE "paid"
         END As hasPaid      
 
@@ -94,23 +186,29 @@ export class UsersService {
 
       WHERE
            (${paymentStatus} IS NULL OR hasPaid = ${paymentStatus})
-           AND (${query} IS NULL OR name LIKE ${'%' + query + '%'})
-           AND (${query} IS NULL OR email LIKE ${'%' + query + '%'});
+          AND (${query} IS NULL OR name LIKE CONCAT('%', ${query}, '%') OR email LIKE CONCAT('%', ${query}, '%'))
           
       `;
+
+    return (data as any[]).map((e: any) => {
+      return {
+        ...e,
+        picUrl: e.picUrl ? `${"http://localhost:5000"}/uploads/${e.picUrl}` : null
+      }
+    })
   }
 
   findOne(id: string) {
     return this.dbService.user.findUnique({ where: { id: id } })
   }
 
-  async findAllUsersCount(){
+  async findAllUsersCount() {
     const usersCount = await this.dbService.user.count()
-    return {usersCount}
+    return { usersCount }
   }
 
-  async getDashboardData(){
-    const totalUser =""
-    const totalAttendanceToday =""
+  async getDashboardData() {
+    const totalUser = ""
+    const totalAttendanceToday = ""
   }
 }
