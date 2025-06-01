@@ -65,7 +65,7 @@ export class UsersController {
     return [
       { label: "Total Users", data: totalUsers },
       { label: "Users Today", data: usersToday },
-      { label: "Total Revenue", data: totalRevenue },
+      { label: "Monthly Revenue", data: totalRevenue },
       { label: "Attendance Today", data: attendanceToday },
       { label: "Morning Attendance", data: morningAttendance },
       { label: "Evening Attendance", data: eveningAttendance },
