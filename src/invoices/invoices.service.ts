@@ -1,5 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { DbService } from 'src/db/db.service';
 import { InvoiceSearchType } from './invoices.controller';
 import { addDays, startOfDay } from 'date-fns';
@@ -23,7 +22,7 @@ export class InvoicesService {
           invoiceType: invoice.invoiceType,
           description: invoice.description,
           userId: invoice.userId,
-          
+
         }
       })
     ])
@@ -44,7 +43,8 @@ export class InvoicesService {
         ...(invoiceType ? { invoiceType } : {}),
 
       },
-      include: { user: true }
+      include: { user: true },
+      orderBy: { createdAt: 'desc' }
     })
   }
 
